@@ -22,6 +22,15 @@ class EventPipelineFlowSpec extends StreamFlowSpec {
 
     val sessionHeaders = Map("MatchSession" -> 5426)
 
+    "Have messages in the successful output using the final Event Pipeline Flow with the Sinks connected" in withMessage(sessionHeaders) { message =>
+
+      val output = Source.single(message).via(EventPipelineMock.eventPipelineFlow).runWith(collector)
+
+      val result = Await.result(output, 1000.millis)
+
+      result.headers should contain key ("starting")
+    }
+
     "Have messages in the successful output" in withMessage(sessionHeaders) { message =>
 
       val (successfulOut, eventTypeSuppressed, eventDeletedLogger) = flowGraph(message)
