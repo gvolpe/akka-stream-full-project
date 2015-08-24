@@ -11,3 +11,5 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-stream-testkit-experimental" % "1.0",
   "org.scalatest" %% "scalatest" % "2.2.4"
 )
+
+ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages := ".*StreamsApp.*"

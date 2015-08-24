@@ -27,9 +27,4 @@ object PartialFlowGraphUtils {
     message.copy(headers, message.event)
   }
 
-  def removeHeader(message: FlowMessage, headerName: String): FlowMessage = {
-    val headers = message.headers - headerName
-    message.copy(headers, message.event)
-  }
-
 }
