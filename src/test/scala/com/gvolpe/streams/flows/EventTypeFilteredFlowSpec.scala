@@ -1,6 +1,6 @@
 package com.gvolpe.streams.flows
 
-import akka.stream.scaladsl.Source
+import com.gvolpe.streams.testkit.FlowTestKit
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -13,9 +13,7 @@ class EventTypeFilteredFlowSpec extends StreamFlowSpec {
 
     "Have messages " in withMessage { message =>
 
-      val future = Source.single(message)
-        .via(EventTypeFiltered.eventTypeFilteredFlow)
-        .runWith(collector)
+      val future = FlowTestKit().graph(EventTypeFiltered.eventTypeFilteredFlow, message)
 
       val result = Await.result(future, 1000.millis)
 

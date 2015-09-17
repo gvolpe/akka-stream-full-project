@@ -2,11 +2,8 @@ package com.gvolpe.streams.flows
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.{Flow, Keep, Sink}
 import akka.testkit.TestKit
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-
-import scala.concurrent.Future
 
 class StreamFlowSpec extends TestKit(ActorSystem("StreamFlowSpec"))
                      with WordSpecLike
@@ -14,9 +11,6 @@ class StreamFlowSpec extends TestKit(ActorSystem("StreamFlowSpec"))
                      with BeforeAndAfterAll {
 
   implicit val materializer = ActorMaterializer()
-
-  def collector = genericCollector[FlowMessage]
-  private def genericCollector[T]: Sink[T, Future[T]] = Flow[T].toMat(Sink.head)(Keep.right)
 
   val event = Event(12, "TENNIS", "providerName", "destName")
   val message = FlowMessage(Map.empty, event)

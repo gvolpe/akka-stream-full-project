@@ -1,6 +1,6 @@
 organization := "com.gvolpe"
 
-name := """events-processor-akka-streams"""
+name := """akka-streams-full-project"""
 
 version := "1.0.0-SNAPSHOT"
 
