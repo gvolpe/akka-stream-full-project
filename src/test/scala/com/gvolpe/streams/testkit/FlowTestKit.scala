@@ -1,8 +1,8 @@
 package com.gvolpe.streams.testkit
 
-import akka.stream.{FlowShape, Materializer, Graph, UniformFanOutShape}
 import akka.stream.scaladsl.FlowGraph.Implicits._
 import akka.stream.scaladsl._
+import akka.stream.{FlowShape, Graph, Materializer, UniformFanOutShape}
 
 import scala.concurrent.Future
 
@@ -15,8 +15,8 @@ private[testkit] class FlowTestKit[T](implicit materializer : Materializer) {
   private def sink[T]: Sink[T, Future[T]] = Flow[T].toMat(Sink.head)(Keep.right)
   private def sinkSeq[T]: Sink[T, Future[Seq[T]]] = Flow[T].grouped(100).toMat(Sink.head)(Keep.right)
 
-  def graphSeq[T](flow: Graph[FlowShape[T, T], Unit], message: T): Future[Seq[T]] = {
-    graphSeq(flow, Source.single(message))
+  def graphSeq[T](flow: Graph[FlowShape[T, T], Unit], messageList: List[T]): Future[Seq[T]] = {
+    graphSeq(flow, Source(messageList))
   }
 
   def graphSeq[T](flow: Graph[FlowShape[T, T], Unit], source: Source[T, Unit]): Future[Seq[T]] = {

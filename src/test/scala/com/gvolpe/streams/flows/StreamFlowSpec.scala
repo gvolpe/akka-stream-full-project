@@ -29,4 +29,11 @@ class StreamFlowSpec extends TestKit(ActorSystem("StreamFlowSpec"))
     testCode(newMessage)
   }
 
+  def withMessageList()(testCode: List[FlowMessage] => Unit) = {
+    val headers = Map("MatchSession" -> 5426)
+    val newMessage = message.copy(message.headers ++ headers, Event(6, "GOLF", "providerName", "destName"))
+    val list = List(newMessage, message.copy(message.headers, event))
+    testCode(list)
+  }
+
 }
