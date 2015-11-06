@@ -11,7 +11,7 @@ object PartialFlowGraphUtils {
 
   def partialFlowWithHeader(header: MessageHeader) = partialFlow(e => addHeader(e, header))
 
-  def filterPartialFlowGraph(filterFunction: FlowMessage => Boolean) = FlowGraph.partial() { implicit b =>
+  def filterPartialFlowGraph(filterFunction: FlowMessage => Boolean) = FlowGraph.create() { implicit b =>
     val bcast = b.add(Broadcast[FlowMessage](2))
     val filter = b.add(Flow[FlowMessage] filter (filterFunction(_)))
     val notFilter = b.add(Flow[FlowMessage] filter (!filterFunction(_)))

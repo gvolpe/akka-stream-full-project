@@ -9,7 +9,7 @@ trait EventInputFlow {
 
   this: EventTypeFilteredFlow =>
 
-  lazy val eventInputFlow = FlowGraph.partial() { implicit b =>
+  lazy val eventInputFlow = FlowGraph.create() { implicit b =>
     val headersProcess = b.add(partialFlowWithHeader(MessageHeader("starting", System.currentTimeMillis())))
 
     val eventTypeFilterFlow = b.add(filterPartialFlowGraph(_.event.`type` == "TENNIS"))

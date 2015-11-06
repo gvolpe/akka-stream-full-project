@@ -1,8 +1,8 @@
 package com.gvolpe.streams.testkit
 
+import akka.stream._
 import akka.stream.scaladsl.FlowGraph.Implicits._
 import akka.stream.scaladsl._
-import akka.stream.{FlowShape, Graph, Materializer, UniformFanOutShape}
 
 import scala.concurrent.Future
 
@@ -36,11 +36,14 @@ private[testkit] class FlowTestKit[T](implicit materializer : Materializer) {
   }
 
   def graph2[T](flow: Graph[UniformFanOutShape[T, T], Unit], source: Source[T, Unit]): (Future[T], Future[T]) =
-    FlowGraph.closed(sink[T], sink[T])((_, _)) { implicit b => (out0, out1) =>
-      val inputFlow: UniformFanOutShape[T, T] = b.add(flow)
-      source ~> inputFlow
-                inputFlow.out(0) ~> out0
-                inputFlow.out(1) ~> out1
+    RunnableGraph.fromGraph {
+      FlowGraph.create(sink[T], sink[T])((_, _)) { implicit b => (out0, out1) =>
+        val inputFlow: UniformFanOutShape[T, T] = b.add(flow)
+        source ~> inputFlow
+        inputFlow.out(0) ~> out0
+        inputFlow.out(1) ~> out1
+        ClosedShape
+      }
     }.run()
 
   def graph3[T](flow: Graph[UniformFanOutShape[T, T], Unit], message: T): (Future[T], Future[T], Future[T]) = {
@@ -48,26 +51,32 @@ private[testkit] class FlowTestKit[T](implicit materializer : Materializer) {
   }
 
   def graph3[T](flow: Graph[UniformFanOutShape[T, T], Unit], source: Source[T, Unit]): (Future[T], Future[T], Future[T]) =
-    FlowGraph.closed(sink[T], sink[T], sink[T])((_, _, _)) { implicit b => (out0, out1, out2) =>
-      val inputFlow: UniformFanOutShape[T, T] = b.add(flow)
-      source ~> inputFlow
-                inputFlow.out(0) ~> out0
-                inputFlow.out(1) ~> out1
-                inputFlow.out(2) ~> out2
-  }.run()
+    RunnableGraph.fromGraph {
+      FlowGraph.create(sink[T], sink[T], sink[T])((_, _, _)) { implicit b => (out0, out1, out2) =>
+        val inputFlow: UniformFanOutShape[T, T] = b.add(flow)
+        source ~> inputFlow
+        inputFlow.out(0) ~> out0
+        inputFlow.out(1) ~> out1
+        inputFlow.out(2) ~> out2
+        ClosedShape
+      }
+    }.run()
 
   def graph4[T](flow: Graph[UniformFanOutShape[T, T], Unit], message: T): (Future[T], Future[T], Future[T], Future[T]) = {
     graph4(flow, Source.single(message))
   }
 
   def graph4[T](flow: Graph[UniformFanOutShape[T, T], Unit], source: Source[T, Unit]): (Future[T], Future[T], Future[T], Future[T]) =
-    FlowGraph.closed(sink[T], sink[T], sink[T], sink[T])((_, _, _, _)) { implicit b => (out0, out1, out2, out3) =>
-      val inputFlow: UniformFanOutShape[T, T] = b.add(flow)
-      source ~> inputFlow
-                inputFlow.out(0) ~> out0
-                inputFlow.out(1) ~> out1
-                inputFlow.out(2) ~> out2
-                inputFlow.out(3) ~> out3
+    RunnableGraph.fromGraph {
+      FlowGraph.create(sink[T], sink[T], sink[T], sink[T])((_, _, _, _)) { implicit b => (out0, out1, out2, out3) =>
+        val inputFlow: UniformFanOutShape[T, T] = b.add(flow)
+        source ~> inputFlow
+        inputFlow.out(0) ~> out0
+        inputFlow.out(1) ~> out1
+        inputFlow.out(2) ~> out2
+        inputFlow.out(3) ~> out3
+        ClosedShape
+      }
     }.run()
 
   def graph5[T](flow: Graph[UniformFanOutShape[T, T], Unit], message: T): (Future[T], Future[T], Future[T], Future[T], Future[T]) = {
@@ -75,14 +84,17 @@ private[testkit] class FlowTestKit[T](implicit materializer : Materializer) {
   }
 
   def graph5[T](flow: Graph[UniformFanOutShape[T, T], Unit], source: Source[T, Unit]): (Future[T], Future[T], Future[T], Future[T], Future[T]) =
-    FlowGraph.closed(sink[T], sink[T], sink[T], sink[T], sink[T])((_, _, _, _, _)) { implicit b => (out0, out1, out2, out3, out4) =>
-      val inputFlow: UniformFanOutShape[T, T] = b.add(flow)
-      source ~> inputFlow
-                inputFlow.out(0) ~> out0
-                inputFlow.out(1) ~> out1
-                inputFlow.out(2) ~> out2
-                inputFlow.out(3) ~> out3
-                inputFlow.out(4) ~> out4
+    RunnableGraph.fromGraph {
+      FlowGraph.create(sink[T], sink[T], sink[T], sink[T], sink[T])((_, _, _, _, _)) { implicit b => (out0, out1, out2, out3, out4) =>
+        val inputFlow: UniformFanOutShape[T, T] = b.add(flow)
+        source ~> inputFlow
+        inputFlow.out(0) ~> out0
+        inputFlow.out(1) ~> out1
+        inputFlow.out(2) ~> out2
+        inputFlow.out(3) ~> out3
+        inputFlow.out(4) ~> out4
+        ClosedShape
+      }
     }.run()
 
 }

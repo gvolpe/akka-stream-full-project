@@ -8,7 +8,7 @@ import com.gvolpe.streams.flows.utils.PartialFlowGraphUtils._
 
 trait EventTypeFilteredFlow {
 
-  lazy val eventTypeFilteredFlow = FlowGraph.partial() { implicit b =>
+  lazy val eventTypeFilteredFlow = FlowGraph.create() { implicit b =>
     val logger = b.add(partialFlowWithHeader(MessageHeader("suppressed", "EventTypeFilter")))
     val sender = b.add(partialFlow(sendToExternalService(_)))
 

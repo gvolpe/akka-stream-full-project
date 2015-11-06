@@ -8,7 +8,7 @@ import com.gvolpe.streams.flows.utils.PartialFlowGraphUtils._
 
 trait EventProcessorFlow {
 
-  lazy val eventProcessorFlow = FlowGraph.partial() { implicit b =>
+  lazy val eventProcessorFlow = FlowGraph.create() { implicit b =>
     val filteredMerge = b.add(Merge[FlowMessage](2))
 
     val originFilterFlow = b.add(filterPartialFlowGraph(_.event.origin == "providerName"))

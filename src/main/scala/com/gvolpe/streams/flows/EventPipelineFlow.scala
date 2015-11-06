@@ -9,7 +9,7 @@ trait EventPipelineFlow extends EventInputFlow
                         with EventTypeFilteredFlow
                         with EventProcessorFlow {
 
-  lazy val eventPipelineFlow = FlowGraph.partial() { implicit b =>
+  lazy val eventPipelineFlow = FlowGraph.create() { implicit b =>
     val pipeline = b.add(partialEventPipeline)
     pipeline.out(1) ~> Sink.ignore
     pipeline.out(2) ~> Sink.ignore
@@ -17,7 +17,7 @@ trait EventPipelineFlow extends EventInputFlow
     FlowShape(pipeline.in, pipeline.out(0))
   }.named("eventPipelineFlow")
 
-  lazy val partialEventPipeline = FlowGraph.partial() { implicit b =>
+  lazy val partialEventPipeline = FlowGraph.create() { implicit b =>
     val eventInput = b.add(eventInputFlow)
     val headersValidation = b.add(headersValidationFlow)
     val processorMerge = b.add(Merge[FlowMessage](2))

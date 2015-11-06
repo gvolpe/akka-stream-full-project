@@ -28,7 +28,7 @@ class StreamingResilientSpec extends TestKit(ActorSystem("StreamingResilientSpec
   private val restartingDecider = ActorAttributes.withSupervisionStrategy(Supervision.restartingDecider)
   private val actorSource = Source.actorRef(100, OverflowStrategy.dropHead)
 
-  private val failureFlow = FlowGraph.partial() { implicit b  =>
+  private val failureFlow = FlowGraph.create() { implicit b  =>
     val f1 = b.add(partialFlowWithHeader(MessageHeader("f1", "value1")))
     val f2 = b.add(partialFlow(generateException(_)))
     val f3 = b.add(partialFlowWithHeader(MessageHeader("f3", "value3")))
