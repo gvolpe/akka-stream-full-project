@@ -16,7 +16,7 @@ object StreamsApp extends App with EventPipelineFlow {
 
   val source = Source.actorRef[FlowMessage](1000, OverflowStrategy.dropHead)
   val decider = ActorAttributes.supervisionStrategy(Supervision.restartingDecider)
-  val pipelineActor = source.via(eventPipelineFlow.withAttributes(decider)).to(Sink.ignore).run()
+  val pipelineActor = source.via(eventPipelineFlow.withAttributes(decider)).to(Sink.foreach(println)).run()
 
   pipelineActor ! message
   pipelineActor ! message2
