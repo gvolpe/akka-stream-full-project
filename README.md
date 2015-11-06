@@ -10,4 +10,4 @@ For more information read the [Post I wrote](https://partialflow.wordpress.com/2
 
 ### Akka Stream 2.0 Support
 
-A new branch *"akka-stream-2.0-M1"* was created to try the first milestone of the second version using the same example.
+A new branch **"akka-stream-2.0-M1"** was created to try the first milestone of the second version using the same example. Try it out!
